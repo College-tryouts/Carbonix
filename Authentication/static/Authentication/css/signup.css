@@ -1,0 +1,141 @@
+/* Body background */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Wrapper */
+.signup-wrapper {
+    width: 100%;
+    max-width: 450px;
+    padding: 20px;
+}
+
+/* Signup Box */
+.signup-box {
+    background: #1c1c1c;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 230, 230, 0.2);
+    text-align: center;
+    color: #fff;
+}
+
+.signup-box h2 {
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+    color: #fff;
+}
+
+.signup-box h2 span {
+    color: #00e6e6;
+}
+
+.subtitle {
+    font-size: 0.95rem;
+    color: #aaa;
+    margin-bottom: 25px;
+}
+
+/* Input Fields */
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #ccc;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border: 2px solid #00e6e6;
+    background: #1f1f1f;
+}
+
+/* Button */
+.btn {
+    width: 100%;
+    padding: 12px;
+    background: #00e6e6;
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    background: #00cccc;
+}
+
+/* Login link */
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #bbb;
+}
+
+.login-link a {
+    color: #00e6e6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* Field error */
+.error {
+    color: #ff4d4d;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Style select fields like input boxes */
+.input-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    appearance: none; /* remove default arrow for some browsers */
+    transition: all 0.3s ease;
+}
+
+.input-group select:focus {
+    border: 2px solid #00e6e6;
+    background: #1f1f1f;
+}
+
+/* Optional: add a custom arrow */
+.input-group select::-ms-expand {
+    display: none; /* remove default arrow in IE/Edge */
+}
+

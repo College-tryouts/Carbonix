@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbonix - Company Dashboard</title>
+  <link rel="stylesheet" href="{% static 'emissions/css/dashboard.css' %}">
+</head>
+<body>
+<header>
+  <h1>Carbonix</h1>
+  <nav>
+    <span>Welcome, {{ user.username }}</span>
+    <a href="{% url 'Authentication:logout' %}">Logout</a>
+  </nav>
+</header>
+
+<main class="company-dashboard">
+  <h2>{{ company.name }}</h2>
+  <p class="subtitle">Mines under this company</p>
+{% if mines %}
+    <div class="mine-list">
+    {% for mine in mines %}
+        <a href="{% url 'emissions:mine_detail' mine.id %}" class="mine-card">
+            <strong>{{ mine.name }}</strong><br>
+            <span>{{ mine.location }}</span>
+        </a>
+    {% endfor %}
+    </div>
+
+    {% else %}
+        <p>No mines available for {{ company.name }}.</p>
+{% endif %}
+
+</main>
+
+<script src="{% static 'emissions/js/dashboard.js' %}"></script>
+</body>
+</html>

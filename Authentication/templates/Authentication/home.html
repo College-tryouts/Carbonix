@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carbonix</title>
+<style>
+/* Reset */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+
+/* Body & Background */
+body {
+    background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+    color: #fff;
+    overflow-x: hidden;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    background-color: rgba(0,0,0,0.7);
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+}
+
+header h1 {
+    font-family: 'Verdana', sans-serif;
+    letter-spacing: 2px;
+    color: #00e6e6;
+}
+
+nav a {
+    color: #fff;
+    margin-left: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #00e6e6;
+}
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: url('https://images.unsplash.com/photo-1602609717706-cb0d0c53d95a?fit=crop&w=1470&q=80') no-repeat center center/cover;
+    position: relative;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 850px;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    color: #00e6e6;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+.hero-buttons a {
+    text-decoration: none;
+    padding: 12px 30px;
+    margin: 10px;
+    border-radius: 30px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.signin-btn {
+    background: #00e6e6;
+    color: #000;
+}
+
+.signup-btn {
+    background: transparent;
+    border: 2px solid #00e6e6;
+    color: #00e6e6;
+}
+
+.signin-btn:hover {
+    transform: scale(1.1);
+}
+
+.signup-btn:hover {
+    background: #00e6e6;
+    color: #000;
+    transform: scale(1.1);
+}
+
+/* Section styles */
+section {
+    padding: 80px 50px;
+}
+
+section h2 {
+    text-align: center;
+    color: #00e6e6;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+}
+
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.card {
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 15px;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+}
+
+.card img {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.card h3 {
+    margin-bottom: 15px;
+    color: #00e6e6;
+}
+
+.card p {
+    line-height: 1.5;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    background: #000;
+    color: #fff;
+}
+
+/* Animation for hero text */
+@keyframes fadeInUp {
+    0% { opacity: 0; transform: translateY(20px);}
+    100% { opacity: 1; transform: translateY(0);}
+}
+
+.hero h2, .hero p, .hero-buttons a {
+    animation: fadeInUp 1s ease forwards;
+}
+
+.hero p { animation-delay: 0.3s; }
+.hero-buttons a { animation-delay: 0.6s; }
+
+/* Responsive */
+@media(max-width: 768px){
+    .cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero h2 {
+        font-size: 2.2rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>Carbonix</h1>
+    <nav>
+        <a href="#why">Why Carbonix?</a>
+        <a href="#how">How It Works</a>
+        <a href="/login/">Sign In</a>
+        <a href="/signup/">Sign Up</a>
+    </nav>
+</header>
+
+<div class="hero">
+    <div class="hero-content">
+        <h2>Smart Monitoring for Coal Mines</h2>
+        <p>Carbonix is a complete monitoring system designed for coal mining companies. Track air pollutants, measure emissions, and generate accurate reports for compliance and sustainability.</p>
+        <div class="hero-buttons">
+            <a href="/login/" class="signin-btn">Sign In</a>
+            <a href="/signup/" class="signup-btn">Sign Up</a>
+        </div>
+    </div>
+</div>
+
+<section id="why">
+    <h2>Why Carbonix?</h2>
+    <div class="cards">
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3037/3037003.png" alt="Safety">
+            <h3>Safety First</h3>
+            <p>Monitor gases like CO₂, CH₄, and SO₂ to ensure worker safety inside mining zones.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2910/2910760.png" alt="Compliance">
+            <h3>Compliance Ready</h3>
+            <p>Generate accurate reports for government agencies and stay compliant with regulations.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3064/3064197.png" alt="Efficiency">
+            <h3>Operational Efficiency</h3>
+            <p>Gain real-time insights to optimize mining operations and reduce unnecessary emissions.</p>
+        </div>
+    </div>
+</section>
+
+<section id="how">
+    <h2>How It Works</h2>
+    <div class="cards">
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/3380/3380722.png" alt="Sensors">
+            <h3>Sensor Network</h3>
+            <p>Deploy advanced sensors across mines to detect gases, dust, and other harmful pollutants.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2913/2913466.png" alt="Analysis">
+            <h3>Data Analysis</h3>
+            <p>Collect and process real-time sensor data to calculate emission levels accurately.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2913/2913126.png" alt="Reports">
+            <h3>Report Generation</h3>
+            <p>Create detailed dashboards and reports to support decision-making and compliance.</p>
+        </div>
+    </div>
+</section>
+
+<footer>
+    &copy; 2025 Carbonix. All rights reserved.
+</footer>
+
+<script>
+// Optional subtle floating animation for hero content
+const heroContent = document.querySelector('.hero-content');
+let offset = 0;
+setInterval(() => {
+    offset = offset === 10 ? 0 : 10;
+    heroContent.style.transform = `translateY(${offset}px)`;
+}, 3000);
+</script>
+
+</body>
+</html>

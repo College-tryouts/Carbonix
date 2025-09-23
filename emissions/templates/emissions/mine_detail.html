@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ mine.name }} - Emissions</title>
+<link rel="stylesheet" href="{% static 'emissions/css/mine_detail.css' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Carbonix</h1>
+    <div class="user-info">
+        <span>{{ user.username }}</span>
+        <a href="{% url 'emissions:company_dashboard' %}">Dashboard</a>
+        <a href="{% url 'Authentication:logout' %}" class="logout-btn">Logout</a>
+    </div>
+</header>
+
+<main>
+    <h2 class="mine-title">{{ mine.name }} - Emissions</h2>
+    <div class="container">
+        <!-- Left panel: Emissions -->
+        <div class="left-panel">
+            {% for emission in mine.emissions.all %}
+            <div class="emission-item" onclick="showEmission('{{ emission.id }}')">
+                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913126.png" alt="{{ emission.pollutant.name }}">
+                <p>{{ emission.pollutant.name }}</p>
+            </div>
+            {% empty %}
+            <p>No emissions recorded yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Right panel: Chart & details -->
+        <div class="right-panel">
+            <canvas id="emissionChart"></canvas>
+            <button id="suggest-btn">Suggest Reduction</button>
+        </div>
+    </div>
+</main>
+
+<!-- Chatbot icon -->
+<div class="chatbot-icon" onclick="toggleChatbot()">
+    💬
+</div>
+<div class="chatbot-panel" id="chatbotPanel">
+    <div class="chatbot-header">
+        <span>Carbonix Assistant</span>
+        <button onclick="toggleChatbot()">X</button>
+    </div>
+    <div class="chatbot-body">
+        <p>Hello! Ask me about emissions, reduction methods, or mine info.</p>
+    </div>
+    <input type="text" placeholder="Type your message..." />
+</div>
+
+<script src="{% static 'emissions/js/mine_detail.js' %}"></script>
+<script>
+    const emissionsData = JSON.parse('{{ emissions_json|escapejs }}');
+</script>
+
+</body>
+</html>

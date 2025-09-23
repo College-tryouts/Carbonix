@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbonix - Login</title>
+    <link rel="stylesheet" href="{% static 'Authentication/css/login.css' %}">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            <h2>Welcome Back to <span>Carbonix</span></h2>
+            <p class="subtitle">Sign in to monitor emissions & keep mining safe</p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="message">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+
+            <p class="signup-link">
+                Don't have an account? 
+                <a href="{% url 'Authentication:signup' %}">Sign Up</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

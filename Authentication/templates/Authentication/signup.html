@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carbonix - Sign Up</title>
+    <link rel="stylesheet" href="{% static 'Authentication/css/signup.css' %}">
+</head>
+<body>
+    <div class="signup-wrapper">
+        <div class="signup-box">
+            <h2>Create Your Account <span>Carbonix</span></h2>
+            <p class="subtitle">Sign up to monitor emissions and manage coal mines efficiently</p>
+
+            <form method="post" action="{% url 'Authentication:signup' %}">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="input-group">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="error">{{ field.errors }}</div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <button type="submit" class="btn">Sign Up</button>
+            </form>
+
+            <p class="login-link">
+                Already have an account? 
+                <a href="{% url 'Authentication:login' %}">Sign In</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

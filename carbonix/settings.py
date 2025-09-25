@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import decouple
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -128,3 +131,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 logout_redirect_url = 'Authentication:home'
+
+# CLAUDE_API_KEY = 'skhf_SArRnPbjXZLAlktugfKWkmuHWUCwepkbvY-ant-api03-KPYmH7GAMb2BDolNL3KPW1iFYLc5-oV0v4MSEsc1VYqWyj_Yae_J2hnmxPdHI6a-sWtOZ26A6_5FhhrAwYodUg-FhWRZwAA'
+HF_API_TOKEN = config('HF_API_TOKEN')
+# DEEPSEEK_API_KEY = "sk-80b87703b109429498e516cbbe9c4164"
+DEEPSEEK_API_KEY = config('DEEPSEEK_API_KEY')

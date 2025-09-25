@@ -9,12 +9,32 @@
 </head>
 <body>
 <header>
+    <!-- Slide-out menu button -->
+<div id="menu-btn" onclick="toggleMenu()">☰</div>
   <h1>Carbonix</h1>
   <nav>
     <span>Welcome, {{ user.username }}</span>
     <a href="{% url 'Authentication:logout' %}">Logout</a>
   </nav>
 </header>
+
+<div id="slide-menu">
+  <div id="menu-btn" onclick="toggleMenu()">☰</div>
+  <h3>Actions</h3>
+  <hr>
+<h3 onclick="toggleForm('mine-form')">➕ Add Mine</h3>
+<div id="mine-form" class="toggle-form" style="display:none;">
+  <form method="POST" action="{% url 'emissions:add_mine' company.id %}">
+    {% csrf_token %}
+    <input type="text" name="mine_name" placeholder="Mine Name" required>
+    <input type="text" name="location" placeholder="Location" required>
+    <input type="number" step="any" name="latitude" placeholder="Latitude">
+    <input type="number" step="any" name="longitude" placeholder="Longitude">
+    <button type="submit">Add Mine</button>
+  </form>
+</div>
+</div>
+
 
 <main class="company-dashboard">
   <h2>{{ company.name }}</h2>

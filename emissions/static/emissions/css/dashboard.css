@@ -170,3 +170,75 @@ header nav a:hover {
     background: #262626;
 }
 
+#menu-btn {
+  font-size: 1.8rem;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+#slide-menu {
+  position: fixed;
+  left: -500px; /* hidden by default */
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background: #1a1a1a;
+  border-right: 1px solid #333;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 999;  /* increase z-index */
+  overflow-y: auto;
+}
+
+#slide-menu form {
+  margin-bottom: 25px;
+}
+
+#slide-menu select, 
+#slide-menu input, 
+#slide-menu button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+#slide-menu button {
+  background: #00e6e6;
+  color: #000;
+  cursor: pointer;
+  z-index: 1000; /* ensure on top */
+  font-weight: bold;
+}
+
+#slide-menu button:hover {
+  background: #009999;
+  color: #fff;
+}
+
+.toggle-form {
+  margin: 10px 0 20px 0;
+  padding-left: 10px;
+  border-left: 2px solid #00e6e6;
+}
+.toggle-form form select,
+.toggle-form form input,
+.toggle-form form button {
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+.toggle-form form button {
+  background: #00e6e6;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+.toggle-form form button:hover {
+  background: #009999;
+  color: #fff;
+}

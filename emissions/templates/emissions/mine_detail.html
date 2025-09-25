@@ -1,66 +1,109 @@
 {% load static %}
+{% load dict_extras %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ mine.name }} - Emissions</title>
-<link rel="stylesheet" href="{% static 'emissions/css/mine_detail.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carbonix - Mine Details</title>
+  <link rel="stylesheet" href="{% static 'emissions/css/mine_detail.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
 <header>
-    <h1>Carbonix</h1>
-    <div class="user-info">
-        <span>{{ user.username }}</span>
-        <a href="{% url 'emissions:company_dashboard' %}">Dashboard</a>
-        <a href="{% url 'Authentication:logout' %}" class="logout-btn">Logout</a>
-    </div>
+  <!-- Slide-out menu button -->
+<div id="menu-btn" onclick="toggleMenu()">☰</div>
+
+  <h1>{{ mine.name }} - Emissions Dashboard</h1>
+  <nav>
+    <a href="{% url 'emissions:company_dashboard' mine.company.id %}">← Back to Company</a>
+    <a href="/logout/">Logout</a>
+  </nav>
 </header>
 
-<main>
-    <h2 class="mine-title">{{ mine.name }} - Emissions</h2>
-    <div class="container">
-        <!-- Left panel: Emissions -->
-        <div class="left-panel">
-            {% for emission in mine.emissions.all %}
-            <div class="emission-item" onclick="showEmission('{{ emission.id }}')">
-                <img src="https://cdn-icons-png.flaticon.com/512/2913/2913126.png" alt="{{ emission.pollutant.name }}">
-                <p>{{ emission.pollutant.name }}</p>
-            </div>
-            {% empty %}
-            <p>No emissions recorded yet.</p>
-            {% endfor %}
-        </div>
+<!-- Slide-out menu panel -->
+<div id="slide-menu">
+  <div id="menu-btn" onclick="toggleMenu()">☰</div>
+  <h3>Actions</h3>
+  <hr>
+  <h3 onclick="toggleForm('pollutant-form')">➕ Add Pollutant</h3>
+<div id="pollutant-form" class="toggle-form" style="display:none;">
+  <form method="POST" action="{% url 'emissions:add_pollutant' mine.id %}">
+    {% csrf_token %}
+    <select name="pollutant_id">
+      {% for pollutant in pollutants %}
+        <option value="{{ pollutant.id }}">{{ pollutant.name }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Add</button>
+  </form>
+</div>
 
-        <!-- Right panel: Chart & details -->
-        <div class="right-panel">
-            <canvas id="emissionChart"></canvas>
-            <button id="suggest-btn">Suggest Reduction</button>
-        </div>
-    </div>
+<h3 onclick="toggleForm('sensor-form')">➕ Add Sensor</h3>
+<div id="sensor-form" class="toggle-form" style="display:none;">
+  <form method="POST" action="{% url 'emissions:add_sensor' mine.id %}">
+    {% csrf_token %}
+    <input type="text" name="sensor_name" placeholder="Sensor Name" required>
+    <input type="text" name="sensor_model" placeholder="Sensor Model" required>
+    <select name="pollutant_id">
+      {% for pollutant in pollutants %}
+        <option value="{{ pollutant.id }}">{{ pollutant.name }}</option>
+      {% endfor %}
+    </select>
+    <input type="date" name="installation_date" required>
+    <button type="submit">Add</button>
+  </form>
+</div>
+
+</div>
+
+
+<main class="mine-dashboard" id="mine-dashboard" data-mine-id="{{ mine.id }}" data-mine-name="{{ mine.name }}">
+  <div class="dashboard-container">
+    <!-- Left panel: pollutant squares -->
+    <aside class="left-panel">
+      <ul class="pollutant-grid">
+        {% for pollutant in pollutants %}
+          <li class="pollutant-card" data-id="{{ pollutant.id }}">
+            <img src="{{ icon_map|get_item:pollutant.code }}" alt="{{ pollutant.name }}">
+            <span>{{ pollutant.name }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </aside>
+
+    <!-- Right panel: emission details -->
+    <section class="right-panel">
+      <h2>Emission Details</h2>
+      <div id="chart-area">
+        <p>Select a pollutant on the left to see visualization.</p>
+      </div>
+      <button class="reduce-btn">Suggest Ways to Reduce Emission</button>
+    </section>
+  </div>
 </main>
 
-<!-- Chatbot icon -->
-<div class="chatbot-icon" onclick="toggleChatbot()">
-    💬
-</div>
-<div class="chatbot-panel" id="chatbotPanel">
-    <div class="chatbot-header">
-        <span>Carbonix Assistant</span>
-        <button onclick="toggleChatbot()">X</button>
-    </div>
-    <div class="chatbot-body">
-        <p>Hello! Ask me about emissions, reduction methods, or mine info.</p>
-    </div>
-    <input type="text" placeholder="Type your message..." />
+
+<!-- Chatbot -->
+<div id="chatbot-icon" onclick="toggleChatbot()">🤖</div>
+<div id="chatbot-box">
+  <header>Carbonix Assistant</header>
+  <div class="chat-content" id="chat-content">
+    <p><strong>Bot:</strong> Hi! Ask me about emissions or compliance.</p>
+  </div>
+  <input type="text" id="chat-input" placeholder="Type a message...">
 </div>
 
-<script src="{% static 'emissions/js/mine_detail.js' %}"></script>
 <script>
-    const emissionsData = JSON.parse('{{ emissions_json|escapejs }}');
+  const emissionsData = {{ emissions_data|safe }};
+  const iconMap = {{ icon_map_json|safe }};  // JS gets JSON version
+  const CHATBOT_URL = "{% url 'emissions:chatbot_response' %}";
+
 </script>
 
+
+
+<script src="{% static 'emissions/js/mine_detail.js' %}"></script>
 </body>
 </html>

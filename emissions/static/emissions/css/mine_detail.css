@@ -1,228 +1,217 @@
-/* ==============================
-   Global Styles
-================================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
+/* Body & general */
 body {
-  background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-  color: #e0e0e0;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background: #0f0f0f;
+  color: #fff;
 }
 
-/* ==============================
-   Header
-================================= */
 header {
-  background: rgba(0, 0, 0, 0.85);
-  padding: 15px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #222;
+  padding: 15px 30px;
+  background-color: #1a1a1a;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-header h1 {
-  font-size: 1.5rem;
-  color: #00e6e6;
-}
-
+header h1 { color: #00e6e6; font-size: 1.8rem; }
 header nav a {
-  color: #e0e0e0;
+  color: #fff;
   margin-left: 20px;
   text-decoration: none;
   font-weight: bold;
-  transition: color 0.3s;
 }
+header nav a:hover { color: #00e6e6; }
 
-header nav a:hover {
-  color: #00e6e6;
-}
-
-/* ==============================
-   Main Dashboard Layout
-================================= */
-.mine-dashboard {
+/* Dashboard layout */
+.dashboard-container {
   display: flex;
-  flex: 1;
-  height: calc(100vh - 70px); /* adjust for header */
+  min-height: 90vh;
 }
 
-/* Sidebar */
-.sidebar {
-  background: #111;
-  width: 250px;
-  padding: 20px 0;
-  border-right: 1px solid #222;
+/* Left panel */
+.left-panel {
+  width: 220px;
+  background: #1a1a1a;
+  padding: 20px;
+  border-right: 1px solid #333;
   overflow-y: auto;
 }
 
-.sidebar ul {
-  list-style: none;
+.pollutant-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
 }
 
-.sidebar li {
-  display: flex;
-  align-items: center;
-  padding: 12px 20px;
+.pollutant-card {
+  background: #222;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
   cursor: pointer;
-  transition: background 0.3s;
-}
-
-.sidebar li:hover {
-  background: #1f1f1f;
-}
-
-.sidebar img {
-  width: 32px;
-  height: 32px;
-  margin-right: 12px;
-}
-
-.sidebar span {
-  color: #fff;
-  font-size: 1rem;
-}
-
-/* Emission Details */
-.emission-details {
-  flex: 1;
-  padding: 30px;
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-}
-
-.emission-details h2 {
-  font-size: 1.8rem;
-  color: #00e6e6;
-  margin-bottom: 20px;
-}
-
-#chart-area {
-  flex: 1;
-  background: #1a1a1a;
-  border-radius: 10px;
-  padding: 20px;
-  margin-bottom: 20px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  border: 1px solid #222;
 }
+
+.pollutant-card img {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.pollutant-card span { color: #00e6e6; font-weight: bold; }
+
+.pollutant-card:hover {
+  background: #00e6e6;
+  color: #000;
+}
+
+.pollutant-card:hover span { color: #000; }
+
+/* Right panel */
+.right-panel {
+  flex: 1;
+  padding: 30px;
+  background: #121212;
+  overflow-y: auto;
+}
+
+.right-panel h2 { color: #00e6e6; margin-bottom: 20px; }
+#chart-area { height: 400px; margin-bottom: 20px; }
 
 .reduce-btn {
-  align-self: flex-start;
   padding: 12px 25px;
+  border-radius: 25px;
   border: none;
-  border-radius: 30px;
   background: #00e6e6;
   color: #000;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s, background 0.3s;
+  transition: transform 0.3s ease;
 }
 
-.reduce-btn:hover {
-  background: #00cccc;
-  transform: scale(1.05);
-}
+.reduce-btn:hover { transform: scale(1.05); }
 
-/* ==============================
-   Chatbot
-================================= */
+/* Chatbot */
 #chatbot-icon {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background: #00e6e6;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 1.8rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  font-size: 2rem;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-  transition: transform 0.2s;
-  z-index: 200;
-}
-
-#chatbot-icon:hover {
-  transform: scale(1.1);
 }
 
 #chatbot-box {
+  display: none;
   position: fixed;
-  bottom: 90px;
+  bottom: 70px;
   right: 20px;
-  width: 320px;
-  height: 420px;
+  width: 300px;
+  max-height: 400px;
   background: #1a1a1a;
   border: 1px solid #333;
   border-radius: 12px;
-  display: none; /* initially hidden */
   flex-direction: column;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.7);
   overflow: hidden;
-  z-index: 250;
 }
 
 #chatbot-box header {
   background: #00e6e6;
   color: #000;
-  padding: 12px;
-  text-align: center;
+  padding: 10px;
   font-weight: bold;
 }
 
 .chat-content {
-  flex: 1;
   padding: 10px;
+  flex: 1;
   overflow-y: auto;
 }
 
-.chat-content p {
-  margin-bottom: 10px;
-}
-
 #chat-input {
+  padding: 10px;
   border: none;
-  padding: 12px;
   width: 100%;
   outline: none;
-  background: #111;
+  background: #222;
   color: #fff;
-  border-top: 1px solid #333;
 }
 
-/* ==============================
-   Responsive
-================================= */
-@media(max-width: 768px){
-  .mine-dashboard {
-    flex-direction: column;
-  }
 
-  .sidebar {
-    width: 100%;
-    display: flex;
-    overflow-x: auto;
-  }
+#menu-btn {
+  font-size: 1.8rem;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 15px;
+}
 
-  .sidebar ul {
-    display: flex;
-  }
+#slide-menu {
+  position: fixed;
+  left: -500px; /* hidden by default */
+  top: 0;
+  width: 300px;
+  height: 100%;
+  background: #1a1a1a;
+  border-right: 1px solid #333;
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 999;  /* increase z-index */
+  overflow-y: auto;
+}
 
-  .sidebar li {
-    flex: none;
-    border-bottom: none;
-    border-right: 1px solid #222;
-  }
+#slide-menu form {
+  margin-bottom: 25px;
+}
+
+#slide-menu select, 
+#slide-menu input, 
+#slide-menu button {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+#slide-menu button {
+  background: #00e6e6;
+  color: #000;
+  cursor: pointer;
+  z-index: 1000; /* ensure on top */
+  font-weight: bold;
+}
+
+#slide-menu button:hover {
+  background: #009999;
+  color: #fff;
+}
+
+.toggle-form {
+  margin: 10px 0 20px 0;
+  padding-left: 10px;
+  border-left: 2px solid #00e6e6;
+}
+.toggle-form form select,
+.toggle-form form input,
+.toggle-form form button {
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+.toggle-form form button {
+  background: #00e6e6;
+  color: #000;
+  font-weight: bold;
+  cursor: pointer;
+}
+.toggle-form form button:hover {
+  background: #009999;
+  color: #fff;
 }

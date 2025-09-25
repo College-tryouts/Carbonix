@@ -24,3 +24,21 @@ if (chatInput) {
     }
   });
 }
+
+function toggleMenu() {
+  const menu = document.getElementById("slide-menu");
+  if (menu.style.left === "0px") {
+    menu.style.left = "-500px";
+  } else {
+    menu.style.left = "0px";
+  }
+}
+
+function toggleForm(formId) {
+  const form = document.getElementById(formId);
+  if (form.style.display === "none" || form.style.display === "") {
+    form.style.display = "block";
+  } else {
+    form.style.display = "none";
+  }
+}

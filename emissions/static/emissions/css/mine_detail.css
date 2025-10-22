@@ -4,6 +4,7 @@ body {
   font-family: 'Arial', sans-serif;
   background: #0f0f0f;
   color: #fff;
+  /* overflow: hidden; */
 }
 
 header {
@@ -27,10 +28,17 @@ header nav a {
 header nav a:hover { color: #00e6e6; }
 
 /* Dashboard layout */
+/* .dashboard-container {
+  display: flex;
+  min-height: 100vh;
+} */
+
 .dashboard-container {
   display: flex;
-  min-height: 90vh;
+  height: calc(100vh - 70px); /* fits under header */
+  overflow: hidden; /* ✅ prevent both from scrolling */
 }
+
 
 /* Left panel */
 .left-panel {
@@ -39,6 +47,7 @@ header nav a:hover { color: #00e6e6; }
   padding: 20px;
   border-right: 1px solid #333;
   overflow-y: auto;
+  height: 100%;
 }
 
 .pollutant-grid {
@@ -78,7 +87,7 @@ header nav a:hover { color: #00e6e6; }
   flex: 1;
   padding: 30px;
   background: #121212;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .right-panel h2 { color: #00e6e6; margin-bottom: 20px; }
@@ -132,6 +141,20 @@ header nav a:hover { color: #00e6e6; }
   flex: 1;
   overflow-y: auto;
 }
+
+.chat-content ul {
+    list-style: disc;
+    padding-left: 20px;
+}
+
+.chat-content li {
+    margin-bottom: 8px;
+}
+
+.chat-content strong {
+    color: #00e6e6;
+}
+
 
 #chat-input {
   padding: 10px;

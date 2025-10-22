@@ -23,44 +23,78 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 
 
+# ICON_MAP = {
+#         'CO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913126.png',
+#         'CH4': 'https://cdn-icons-png.flaticon.com/512/2913/2913153.png',
+#         'SO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913161.png',
+#         'Dust': 'https://cdn-icons-png.flaticon.com/512/2913/2913174.png',
+#         'NOx': 'https://cdn-icons-png.flaticon.com/512/2913/2913186.png',
+#         'PM2.5': 'https://cdn-icons-png.flaticon.com/512/2913/2913199.png',
+#         'PM10': 'https://cdn-icons-png.flaticon.com/512/2913/2913210.png' 
+# }
+
 ICON_MAP = {
-        'CO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913126.png',
-        'CH4': 'https://cdn-icons-png.flaticon.com/512/2913/2913153.png',
-        'SO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913161.png',
-        'Dust': 'https://cdn-icons-png.flaticon.com/512/2913/2913174.png',
-        'NOx': 'https://cdn-icons-png.flaticon.com/512/2913/2913186.png',
-        'PM2.5': 'https://cdn-icons-png.flaticon.com/512/2913/2913199.png',
-        'PM10': 'https://cdn-icons-png.flaticon.com/512/2913/2913210.png' 
+    'CO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913126.png',
+    'CH4': 'https://cdn-icons-png.flaticon.com/512/2913/2913153.png',
+    'SO2': 'https://cdn-icons-png.flaticon.com/512/2913/2913161.png',
+    'Dust': 'https://cdn-icons-png.flaticon.com/512/2913/2913174.png',
+    'NOx': 'https://cdn-icons-png.flaticon.com/512/2913/2913186.png',
+    'PM2.5': 'https://cdn-icons-png.flaticon.com/512/2913/2913199.png',
+    'PM10': 'https://cdn-icons-png.flaticon.com/512/2913/2913210.png',
+    'CO': 'https://cdn-icons-png.flaticon.com/512/1822/1822552.png',        # Carbon monoxide
+    'VOC': 'https://cdn-icons-png.flaticon.com/512/2913/2913225.png',       # Volatile organic compounds (example)
+    'N2O': 'https://static.thenounproject.com/png/nitrous-oxide-icon-5705934-512.png',        # Nitric Oxide (if used)
+    'O2': 'https://cdn-icons-png.flaticon.com/512/2913/2913118.png',
+    'O3': 'https://static.thenounproject.com/png/ozone-icon-4809751-512.png'        # Oxygen (if needed)
 }
+
 
 def mine_detail(request, mine_id):
     mine = get_object_or_404(Mine, id=mine_id)
     pollutants = Pollutant.objects.all()
 
-    emissions_data = {}
+    # Pollutant-wise sensor readings
+    pollutant_sensor_data = {}
     for pollutant in pollutants:
-        emissions = (
-            EmissionCalculation.objects.filter(mine=mine, pollutant=pollutant)
-            .order_by("period_start")
-            .values("period_start", "emission_value")
-        )
-        emissions_data[str(pollutant.id)] = list(emissions)  # ✅ string keys
+        readings_list = []
+        sensors = Sensor.objects.filter(mine=mine, pollutant=pollutant).prefetch_related('readings')
+        for sensor in sensors:
+            for r in sensor.readings.all().order_by('timestamp'):
+                readings_list.append({
+                    "timestamp": r.timestamp.isoformat(),
+                    "value": r.value,
+                    "sensor": sensor.name,
+                    "unit": r.unit
+                })
+        # ensure chronological order
+        readings_list.sort(key=lambda x: x['timestamp'])
+        pollutant_sensor_data[str(pollutant.id)] = readings_list  # ✅ string keys
 
     return render(
-    request,
-    "emissions/mine_detail.html",
-    {
-        "mine": mine,
-        "pollutants": pollutants,
-        "emissions_data": json.dumps(emissions_data, cls=DjangoJSONEncoder),
-        "icon_map": ICON_MAP,  # keep dict for template
-        "icon_map_json": json.dumps(ICON_MAP),  # extra copy for JS
-    },
-)
+        request,
+        "emissions/mine_detail.html",
+        {
+            "mine": mine,
+            "pollutants": pollutants,
+            "pollutant_sensor_data": json.dumps(pollutant_sensor_data, cls=DjangoJSONEncoder),
+            "icon_map": ICON_MAP,
+            "icon_map_json": json.dumps(ICON_MAP),
+        },
+    )
 
-import requests
+
 from django.http import JsonResponse
 from django.conf import settings
+from openai import OpenAI
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key=settings.DEEPSEEK_API_KEY  # your OpenRouter API key
+)
+
+import markdown
+import re
+from django.http import JsonResponse
 
 def chatbot_response(request):
     message = request.GET.get("message", "")
@@ -69,50 +103,34 @@ def chatbot_response(request):
     if not message:
         return JsonResponse({"response": "Please type a message."})
 
-    # prompt = f"Mine: {mine_name}\nUser: {message}\nSuggest simple ways to reduce emissions."
-
-    url = "https://openrouter.ai/api/v1/chat/completions"
-    headers = {
-        "Authorization": f"Bearer {settings.DEEPSEEK_API_KEY}",
-        "Content-Type": "application/json"
-    }
     system_prompt = (
         "You are a friendly assistant for coal mine emissions. "
         "Reply casually, short and actionable in 3-5 bullet points. "
         "Focus only on what the user asks. "
         "If greeting or small talk, reply casually but briefly."
     )
-    
-    payload = {
-        "model": "deepseek/deepseek-chat-v3.1:free",
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": f"Mine context: {mine_name}\nUser query: {message}"}
-        ]
-    }
 
     try:
-        response = requests.post(url, headers=headers, json=payload, timeout=30)
-        response.raise_for_status()
-        data = response.json()
+        completion = client.chat.completions.create(
+            model="deepseek/deepseek-chat-v3.1:free",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": f"Mine context: {mine_name}\nUser query: {message}"}
+            ]
+        )
 
-        # Get bot reply
-        answer = data.get("choices", [{}])[0].get("message", {}).get("content", "Sorry, no response.")
+        answer = completion.choices[0].message.content
 
     except Exception as e:
-        answer = f"Error: {e}"
+        answer = f"Bot: Sorry, error occurred. {e}"
 
-    return JsonResponse({"response": answer})
+    answer = re.sub(r"<.*?▁.*?>", "", answer)
+    answer = answer.replace("▁", " ")
+    answer = answer.strip()
+    answer_html = markdown.markdown(answer)
 
+    return JsonResponse({"response": answer_html})
 
-
-    try:
-        data = response.json()
-        answer = data[0]['generated_text'].replace(prompt, '').strip()
-    except Exception:
-        answer = "Sorry, I couldn't process that. Try again."
-
-    return JsonResponse({"response": answer})
 
 
 from django.shortcuts import redirect
@@ -177,3 +195,7 @@ def add_mine(request, company_id):
 
     # fallback, although form should be POST
     return redirect('emissions:company_dashboard', company_id=company.id)
+
+
+
+
